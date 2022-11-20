@@ -3,6 +3,10 @@ const app = express();
 
 const router = require("./router");
 
+//add user submitted data to req object
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 //set the public directory (for css and browser js)
 app.use(express.static("public"));
 
