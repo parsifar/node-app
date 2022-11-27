@@ -1,3 +1,4 @@
+const { databaseName } = require("../db");
 const User = require("../models/User");
 
 exports.login = function (req, res) {
@@ -7,14 +8,22 @@ exports.login = function (req, res) {
   user
     .login()
     .then((result) => {
-      res.send(result);
+      req.session.user = { username: user.data.username };
+      req.session.save(function () {
+        res.redirect("/");
+      });
     })
     .catch((err) => {
       res.send(err);
     });
 };
 
-exports.logout = function () {};
+exports.logout = function (req, res) {
+  //remove the session from the db and redirect to home
+  req.session.destroy(function () {
+    res.redirect("/");
+  });
+};
 
 exports.register = function (req, res) {
   //instantiate a new User object and pass the form data to the contructor function
@@ -31,5 +40,11 @@ exports.register = function (req, res) {
 };
 
 exports.home = function (req, res) {
-  res.render("home-guest");
+  //logged in users
+  if (req.session.user) {
+    res.render("home-dashboard", { username: req.session.user.username });
+    //logged out users
+  } else {
+    res.render("home-guest");
+  }
 };
