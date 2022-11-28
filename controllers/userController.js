@@ -14,7 +14,11 @@ exports.login = function (req, res) {
       });
     })
     .catch((err) => {
-      res.send(err);
+      //leverage the flash package to add an object called errors to tge session
+      req.flash("errors", err);
+      req.session.save(function () {
+        res.redirect("/");
+      });
     });
 };
 
@@ -45,6 +49,6 @@ exports.home = function (req, res) {
     res.render("home-dashboard", { username: req.session.user.username });
     //logged out users
   } else {
-    res.render("home-guest");
+    res.render("home-guest", { errors: req.flash("errors") });
   }
 };
