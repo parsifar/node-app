@@ -7,7 +7,10 @@ exports.login = function (req, res) {
     //run the login method
     user.login()
         .then((result) => {
-            req.session.user = { username: user.data.username };
+            req.session.user = {
+                username: user.data.username,
+                avatar: user.avatar,
+            };
             req.session.save(function () {
                 res.redirect("/");
             });
@@ -35,7 +38,10 @@ exports.register = function (req, res) {
     //execute the register method on the user
     user.register()
         .then(() => {
-            req.session.user = { username: user.data.username };
+            req.session.user = {
+                username: user.data.username,
+                avatar: user.avatar,
+            };
             req.session.save(function () {
                 res.redirect("/");
             });
@@ -53,7 +59,10 @@ exports.register = function (req, res) {
 exports.home = function (req, res) {
     //logged in users
     if (req.session.user) {
-        res.render("home-dashboard", { username: req.session.user.username });
+        res.render("home-dashboard", {
+            username: req.session.user.username,
+            avatar: req.session.user.avatar,
+        });
         //logged out users
     } else {
         res.render("home-guest", {

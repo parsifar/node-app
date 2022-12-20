@@ -1,6 +1,7 @@
 const usersCollection = require("../db").db().collection("users");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const md5 = require("md5");
 
 let User = function (data) {
     this.data = data;
@@ -95,6 +96,8 @@ User.prototype.login = function () {
                         attemptedUserObj.password
                     )
                 ) {
+                    this.data = attemptedUserObj;
+                    this.getAvatar();
                     res("login successfull");
                 } else {
                     rej("wrong login");
@@ -120,11 +123,16 @@ User.prototype.register = function () {
             await usersCollection.insertOne(this.data).then((result) => {
                 console.log(result);
             });
+            this.getAvatar();
             resolve();
         } else {
             reject(this.errors);
         }
     });
+};
+
+User.prototype.getAvatar = function () {
+    this.avatar = `https://gravatar.com/avatar/${md5(this.data.email)}?s=128`;
 };
 
 module.exports = User;
