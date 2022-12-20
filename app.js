@@ -6,11 +6,11 @@ const flash = require("connect-flash");
 const app = express();
 
 let sessionOptions = session({
-  secret: "this is cool!",
-  store: MongoStore.create({ client: require("./db") }),
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 1000 * 60 * 60, httpOnly: true },
+    secret: "this is cool!",
+    store: MongoStore.create({ client: require("./db") }),
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60, httpOnly: true },
 });
 
 app.use(sessionOptions);
