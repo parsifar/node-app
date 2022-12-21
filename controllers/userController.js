@@ -71,10 +71,7 @@ exports.register = function (req, res) {
 exports.home = function (req, res) {
     //logged in users
     if (req.session.user) {
-        res.render("home-dashboard", {
-            username: req.session.user.username,
-            avatar: req.session.user.avatar,
-        });
+        res.render("home-dashboard");
         //logged out users
     } else {
         res.render("home-guest", {
