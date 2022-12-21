@@ -1,6 +1,18 @@
 const { databaseName } = require("../db");
 const User = require("../models/User");
 
+//middleware to redirect logged-out users to homepage
+exports.mustBeLoggedIn = function (req, res, next) {
+    if (req.session.user) {
+        next();
+    } else {
+        req.flash("errors", "You must be logged in to do that!");
+        req.session.save(function () {
+            res.redirect("/");
+        });
+    }
+};
+
 exports.login = function (req, res) {
     //create a new user object with the submitted data
     let user = new User(req.body);
