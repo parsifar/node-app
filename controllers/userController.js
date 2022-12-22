@@ -18,10 +18,11 @@ exports.login = function (req, res) {
     let user = new User(req.body);
     //run the login method
     user.login()
-        .then((result) => {
+        .then(() => {
             req.session.user = {
                 username: user.data.username,
                 avatar: user.avatar,
+                _id: user.data._id,
             };
             req.session.save(function () {
                 res.redirect("/");
@@ -53,6 +54,7 @@ exports.register = function (req, res) {
             req.session.user = {
                 username: user.data.username,
                 avatar: user.avatar,
+                _id: user.data._id,
             };
             req.session.save(function () {
                 res.redirect("/");
